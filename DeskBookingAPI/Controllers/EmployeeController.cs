@@ -1,4 +1,5 @@
 ﻿using DeskBookingAPI.Data;
+using DeskBookingAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 
@@ -34,6 +35,15 @@ namespace DeskBookingAPI.Controllers
 
         }
 
+        [HttpGet("byCompany/{companyId}")]
+        public IEnumerable GetByCompanyId(int companyId)
+        {
+            return from employee in _context.Employees
+                   where employee.CompanyId == companyId
+                   select employee;
+        }
+
+
         // POST api/<EmployeeController>
         [HttpPost]
         public IActionResult Create([FromBody] Employee item)
@@ -47,7 +57,7 @@ namespace DeskBookingAPI.Controllers
 
         // PUT api/<EmployeeController>/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Employee item)
+        public IActionResult Update(int id, [FromBody] EmployeeDTO item)
         {
             if (item == null || item.Id != id)
             {
@@ -58,10 +68,10 @@ namespace DeskBookingAPI.Controllers
             {
                 return NotFound();
             }
-            employee.Name = item.Name;
-            employee.Email = item.Email;
-            employee.Role = item.Role;
-            employee.CompanyId = item.CompanyId;
+            employee.Name = item.Name ?? employee.Name;
+            employee.Email=item.Email ?? employee.Email;
+            employee.Role= item.Role ?? employee.Role;
+            employee.CompanyId=item.CompanyId ?? employee.CompanyId;
             _context.Employees.Update(employee);
             _context.SaveChanges();
             return new NoContentResult();

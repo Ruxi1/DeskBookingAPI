@@ -1,5 +1,7 @@
 ﻿using DeskBookingAPI.Data;
+using DeskBookingAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +33,20 @@ namespace DeskBookingAPI.Controllers
                 return NotFound();
             return new JsonResult(item);
 
+        }
+
+        [HttpGet("birouri")]
+        public IEnumerable GetDesk()
+        {
+            var items = _context.Desks.Include(d => d.CompanyRoom).Select(d => new DeskDTO()
+            {
+                deskNumber = d.Number,
+                isStanding = d.IsStanding ? "yes" : "no",
+                roomFloor = d.CompanyRoom.Floor,
+                roomName = d.CompanyRoom.Name,
+                roomNumber = d.CompanyRoom.Number
+            });
+            return items;
         }
 
         // POST api/<DeskController>

@@ -13,9 +13,9 @@ namespace DeskBookingAPI.Data
         public string? Name { get; set; }
         public string Adress { get; set; }
         [JsonIgnore]
-        List<Employee> Employees { get; set; }
+        List<Employee>? Employees { get; set; }
         [JsonIgnore]
-        List<CompanyRoom> CompanyRooms { get; set; }
+        List<CompanyRoom>? CompanyRooms { get; set; }
 
     }
 }

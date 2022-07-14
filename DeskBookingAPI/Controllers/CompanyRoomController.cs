@@ -1,4 +1,5 @@
 ﻿using DeskBookingAPI.Data;
+using DeskBookingAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 
@@ -34,6 +35,14 @@ namespace DeskBookingAPI.Controllers
 
         }
 
+        [HttpGet("byFloor/byCompany/{companyId}/{floor}")]
+        public IEnumerable GetByCompanyId(string floor,int companyId)
+        {
+            return from companyroom in _context.CompanyRooms
+                   where companyroom.CompanyId == companyId && companyroom.Floor==floor
+                   select companyroom;
+        }
+
         // POST api/<CompanyRoomController>
         [HttpPost]
         public IActionResult Create([FromBody] CompanyRoom item)
@@ -47,7 +56,7 @@ namespace DeskBookingAPI.Controllers
 
         // PUT api/<CompanyRoomController>/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] CompanyRoom item)
+        public IActionResult Update(int id, [FromBody] CompanyRoomDTO item)
         {
             if (item == null || item.Id != id)
             {
@@ -58,10 +67,11 @@ namespace DeskBookingAPI.Controllers
             {
                 return NotFound();
             }
-            companyroom.Name = item.Name;
-            companyroom.CompanyId = item.CompanyId;
-            companyroom.Floor=item.Floor;
-            companyroom.Number= item.Number;
+
+            companyroom.Name = item.Name ?? companyroom.Name;
+            companyroom.CompanyId=item.CompanyId ?? companyroom.CompanyId;
+            companyroom.Floor=item.Floor ?? companyroom.Floor;
+            companyroom.Number=item.Number ?? companyroom.Number;
             _context.CompanyRooms.Update(companyroom);
             _context.SaveChanges();
             return new NoContentResult();

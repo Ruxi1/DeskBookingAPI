@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DeskBookingAPI.Data
@@ -11,8 +12,11 @@ namespace DeskBookingAPI.Data
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int DeskId { get; set; }
+        [JsonIgnore]
         public DateTime Date { get; set; }
-        public Employee Employee { get; set; }
-        public Desk Desk { get; set; }
+        [JsonIgnore]
+        public Employee? Employee { get; set; }
+        [JsonIgnore]
+        public Desk? Desk { get; set; }
     }
 }
