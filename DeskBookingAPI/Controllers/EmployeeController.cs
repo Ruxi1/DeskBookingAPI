@@ -44,6 +44,21 @@ namespace DeskBookingAPI.Controllers
         }
 
 
+        [HttpGet("{empId}/favDesk")]
+        public IActionResult GetFavDesk(int empId)
+        {
+            var favDesk = _context.Bookings.Where(b => b.EmployeeId == empId).
+                GroupBy(b => b.DeskId).
+                OrderBy(gr => -gr.Count()).
+                Select(gr => new FavDeskDTO()
+                {
+                    deskId = gr.Key,
+                    numberOfBookings = gr.Count(),
+                }).First();
+            return new ObjectResult(favDesk);
+        }
+
+
         // POST api/<EmployeeController>
         [HttpPost]
         public IActionResult Create([FromBody] Employee item)

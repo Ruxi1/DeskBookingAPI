@@ -81,6 +81,31 @@ namespace DeskBookingAPI.Controllers
             return new NoContentResult();
         }
 
+
+        [HttpPut("{id}/moveTo/{roomId}")]
+        public IActionResult MoveDesk(int id,int roomId)
+        {
+           
+            var desk = _context.Desks.Include(d => d.CompanyRoom).FirstOrDefault(t => t.Id == id);
+            if (desk == null)
+            {
+                return NotFound();
+            }
+            var newroom = _context.CompanyRooms.FirstOrDefault(r => r.Id == roomId);
+            if(desk.CompanyRoom.CompanyId==newroom.CompanyId)
+            {
+                desk.CompanyRoomId = roomId;
+                _context.Desks.Update(desk);
+                _context.SaveChanges();
+                return new NoContentResult();
+            }
+            else
+                return BadRequest("Cannot move desk to another company");
+            
+
+        }
+
+
         // DELETE api/<DeskController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

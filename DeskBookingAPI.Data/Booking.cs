@@ -12,7 +12,7 @@ namespace DeskBookingAPI.Data
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int DeskId { get; set; }
-        [JsonIgnore]
+      
         public DateTime Date { get; set; }
         [JsonIgnore]
         public Employee? Employee { get; set; }
